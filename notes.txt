@@ -1,0 +1,8 @@
+environment setup
+
+check the node version - "node -v"
+
+install vite - "npm create vite@latest"
+select "react" and "javascript"
+
+our first compnent
