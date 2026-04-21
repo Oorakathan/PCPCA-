@@ -1,6 +1,9 @@
 const OrderCard = ({ order }) => (
   <div>
-    <p>#{order.orderId} - {order.restaurant} - ${order.totalAmount}</p>
+    <p><strong>Order #{order.orderId}</strong></p>
+    <p>Restaurant: {order.restaurant}</p>
+    <p>Amount: ${order.totalAmount}</p>
+    <p>Status: {order.status}</p>
   </div>
 )
 

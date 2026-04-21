@@ -8,8 +8,8 @@ const Stats = () => {
   const valid = state.orders.filter(isValid)
 
   const total = valid.reduce((n) => n + 1, 0)
-  const delivered = valid.reduce((n, o) => o.status === 'Delivered' ? n + 1 : n, 0)
-  const cancelled = valid.reduce((n, o) => o.status === 'Cancelled' ? n + 1 : n, 0)
+  const delivered = valid.reduce((n, o) => o.status && o.status === 'Delivered' ? n + 1 : n, 0)
+  const cancelled = valid.reduce((n, o) => o.status && o.status === 'Cancelled' ? n + 1 : n, 0)
 
   useEffect(() => {
     window.appState = { totalOrders: total, deliveredOrders: delivered, cancelledOrders: cancelled }

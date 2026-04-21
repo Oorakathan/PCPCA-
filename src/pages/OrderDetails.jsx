@@ -22,7 +22,10 @@ const OrderDetails = () => {
       <h3>Items</h3>
       {order.items?.length > 0 ? (
         <ul>
-          {order.items.map((item, i) => <li key={i}>{item.name} x{item.quantity} = ${item.price * item.quantity}</li>)}
+          {order.items.map((item, i) => {
+            const subtotal = item.price * item.quantity
+            return <li key={i}>{item.name} x{item.quantity} = ${subtotal} (Subtotal)</li>
+          })}
         </ul>
       ) : <p>No items</p>}
       <h3>Total: ${order.totalAmount}</h3>

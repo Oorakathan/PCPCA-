@@ -1,5 +1,6 @@
 import { useAppContext } from '../context/AppContext'
 import { Link } from 'react-router-dom'
+import OrderCard from '../components/OrderCard'
 
 const Orders = () => {
   const { state, dispatch } = useAppContext()
@@ -23,7 +24,8 @@ const Orders = () => {
       <h2>Pending ({pending.length})</h2>
       {pending.length === 0 ? <p>No pending</p> : pending.map(o => (
         <div key={o.orderId} data-testid="order-item">
-          <p>#{o.orderId} - {o.restaurant} - ${o.totalAmount}</p>
+          <OrderCard order={o} />
+          <p>Customer: {o.customerName || 'Unknown'}</p>
           <button onClick={() => handleMark(o.orderId)}>Mark Delivered</button>
           <Link to={`/orders/${o.orderId}`}><button>View</button></Link>
         </div>
@@ -31,7 +33,8 @@ const Orders = () => {
       <h2>Delivered ({delivered.length})</h2>
       {delivered.length === 0 ? <p>No delivered</p> : delivered.map(o => (
         <div key={o.orderId} data-testid="order-item">
-          <p>#{o.orderId} - {o.restaurant} - ${o.totalAmount}</p>
+          <OrderCard order={o} />
+          <p>Customer: {o.customerName || 'Unknown'}</p>
           <Link to={`/orders/${o.orderId}`}><button>View</button></Link>
         </div>
       ))}
