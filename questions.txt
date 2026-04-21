@@ -1,0 +1,186 @@
+mail:
+Please find your credentials and instructions for the CA2 React Assessment below:
+Credentials
+
+* Password: 635856
+Test Server Details
+- Base URL: https://t4e-testserver.onrender.com/api
+Mandatory Instructions
+1. Authentication & Data Fetch: Ensure proper integration using the API → Context → Reducer architecture.
+2. Routing: Implement the following routes exactly as specified, including their corresponding ID, /filter, and /stats routes. Route names must match exactly to pass evaluation.
+3. Test IDs: Use the mandatory data-testid attributes for list rendering, filter inputs, and the stats page as outlined in your assessment requirements.
+__List Rendering:__
+
+* data-testid="order-item" / activity-item / course-item / event-item
+__Filter:__
+
+* data-testid="filter-input"
+__Stats Page:__
+
+* data-testid="total-orders" / total-activities / total-courses / total-events
+* data-testid="delivered-orders" / goal-achieved / active-courses / active-events
+* data-testid="cancelled-orders" / goal-not-achieved / inactive-courses / soldout-events
+4. Global State: In the Stats component, you must expose the window.appState object containing all required count metrics.
+5. Deployment (Vercel): Create a vercel.json file in the root folder with the necessary rewrite rules to handle client-side routing.
+Submission
+Deploy your project to Vercel and submit the live URL via this form: https://forms.gle/R2HyM8hexjAKcuot6. Submissions must be completed on or before 8:45 a.m.
+Important Notes
+- Strictly follow Context and Reducer architecture.
+- Use reduce or filter rather than storing derived values.
+- Handle inconsistent data and maintain clean code.
+
+post body params:
+{
+"studentId": "E0323035",
+"set": "setA",
+"password": "635856"
+}
+post request url: https://t4e-testserver.onrender.com/api/public/token
+
+post request response:  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50SWQiOiJFMDMyMzAzNSIsInNldCI6InNldEEiLCJleGFtIjoiTUVSTl9CQUNLRU5EX0FTU0VTU01FTlQiLCJpYXQiOjE3NzY3Mzk3NTEsImV4cCI6MTc3Njc0MDA1MX0.LKngtOttcMGhmWRTTPm2yur50IDz5VZ4gT_2agZJBqU",
+    "dataUrl": "/private/setA"
+}
+
+sample from the dataset: {
+    "accessedBy": "E0323035",
+    "data": {
+        "platform": "QuickBite",
+        "orders": [{
+            "orderId": 1001,
+            "customerName": "Arun",
+            "restaurant": "Spice Hub",
+            "items": [{
+                "name": "Biryani",
+                "price": 180,
+                "quantity": 2
+            }, {
+                "name": "Coke",
+                "price": 40,
+                "quantity": 1
+            }],
+            "totalAmount": 400,
+            "status": "Delivered",
+            "deliveryTime": 32,
+            "rating": 4.5
+        }, {
+            "orderId": 1002,
+            "customerName": "Meena",
+            "restaurant": "Pizza Town",
+            "items": [{
+                "name": "Veg Pizza",
+                "price": 250,
+                "quantity": 1
+            }],
+            "totalAmount": 200,
+            "status": "Delivered",
+            "deliveryTime": 25
+        }, {
+            "orderId": 1003,
+            "customerName": "",
+            "restaurant": "Burger Hub",
+            "items": [{
+                "name": "Burger",
+                "price": 120,
+                "quantity": 2
+            }],
+            "totalAmount": 240,
+            "status": "Delivered",
+            "deliveryTime": 20
+        }, {
+            "orderId": 1004,
+            "customerName": "Rahul",
+            "restaurant": "Spice Hub",
+            "items": [],
+            "totalAmount": 0,
+            "status": "Cancelled"
+        }, {
+            "orderId": 1005,
+            "customerName": "Divya",
+            "restaurant": "Dosa Corner",
+            "items": [{
+                "name": "Masala Dosa",
+                "price": 90,
+                "quantity": 3
+            }],
+            "totalAmount": 270,
+            "status": "Delivered",
+            "deliveryTime": 18,
+            "rating": 4.2
+        },
+
+i need full structured code output and vercel hosting
+
+each order object contains: order id customer name, restaurant, items ->{name,price, quantity}, totalamount, status, deliverytime rating. 
+Dataset contains inconsistent and invalid entries. students must handle them appropriately. 
+Application requirements:
+you must build a react application using react context, useReducer react router
+\mandatory routes
+/orders
+/orders/:id
+/filter
+/stats
+
+mandatory rules
+all data must be stored in context
+all updates must go through reducer only
+no hardcoding of dataset
+no storind derived values in state
+must use map, filter, reduce for calculation
+
+testing requirements(mandatory for evaluation)
+1. use test ids:
+data-testid="total-orders"
+data-testid="delivered-orders"
+data-testid="cancelled-orders"
+data-testid="order-item"
+
+2. expose computed values:
+window.appState ={totalOrders, deliveredOrders, cancelledOrders};
+
+Question 1: display valid orders; route: /orders 
+requiremens: display all valid orders only, each order must be shown using a reasuable component, ignore orders where: items array is empty, quantity<=0, totalAmount is invalid
+Constrains: must use .map(), must use Context data, Must not mutate original dataset
+edgecase handling: missing customerName -> display as "Unknown", Missing rating -> do not display rating
+Expected Output(sample): {"orderId":1001, "customerName":"Arun","restaurant":"Spice Hub"}
+
+question 2: order detail view; Route: /orders/:id ; Requirements: display complete details of selected order, show all items with calculated subtotal
+Constrain: must use route parameter, must validate id, must calculate subtotal dynamically
+Edge cases: Invalid ID -> show "Order not found", Missing fields -> handle gracefully
+expected output:{"orderId":1001,"items":[{"name":"Biryani","subtotal":360}],"totalAmount":400}
+
+question 3: filter  orders: routes: /filter
+requirements: filter orders by restaurant name, input should be case-insensitive, display only matching orders
+constrains:  must use .filter(), must not refetch data, must use global state
+validation rules: empty input -> show error message, invalid restaurant -> show "No results found"
+interdependency(important): filtered results must refledt only valid orders (Q1 rules)
+
+Question 4: order status logic; route: /orders
+requirements: add ability to mark an order as delivered
+business logic(buggy requirement): if order is marked as delivered: it must not appear in pending list, stats must update automatically.
+constrains: must use reducer action , must not directly modify state
+edge cases: invalid order -> should not update, already delivered -> no duplicate update
+
+Question 5: order analytics dashboard; route: /stats
+requirements: Display: total valid orders, delivered orders, cancelled orders
+constrains: must use .reduce(), must not store these values in state, must compute dynamically
+edge cases: ignore invalid dataset entries, missing status -> exclude from stats
+expected output: 
+{
+    "totalOrders":30,
+    "deliveredOrders":18,
+    "cancelledOrders": 6
+}
+
+Testing requirements: 
+<div data-testid="total-orders">30</div>
+<div data-testid="delivered-orders">18</div>
+<div data-testid="cancelled-orders">6</div>
+
+
+global state requirement:
+window.appState={
+    totalOrders: 30,
+    deliveredOrders: 18,
+    cancelledOrders:6
+};
